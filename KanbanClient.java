@@ -18,7 +18,8 @@ public class KanbanClient extends Application{
         try {
             Parent root = FXMLLoader.load(getClass().getResource("EntryScreen.fxml"));
             Scene scene = new Scene(root);
-
+            
+            primaryStage.setTitle("Kanban Client");
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
