@@ -2,7 +2,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class EntryScreenController {
+public class EntrySceneController {
 
     @FXML
     private TextField fileField;
