@@ -1,3 +1,4 @@
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -8,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 
-public class kanbanScreenTwo {
+public class PleaseProvideControllerClassName {
 
     @FXML
     private Button addTaskBtn;
@@ -32,7 +33,13 @@ public class kanbanScreenTwo {
     private AnchorPane kanbanWindow;
 
     @FXML
+    private Button leftBtn;
+
+    @FXML
     private Button newCategoryBtn;
+
+    @FXML
+    private Button righBtn;
 
     @FXML
     private Button saveBtn;
@@ -45,5 +52,40 @@ public class kanbanScreenTwo {
 
     @FXML
     private ColorPicker urgency;
+
+    @FXML
+    void btnAddTaskClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnDeleteClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnLeftClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnNewCatClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnRightClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void btnSaveClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void urgencyCat(ActionEvent event) {
+
+    }
 
 }
