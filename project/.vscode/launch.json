@@ -31,6 +31,8 @@
             "mainClass": "Test",
             "projectName": "project_8ef0fee3",
             "vmArgs": "--module-path \"C:/Users/admin/OneDrive/Documents/JavaFX Lib/javafx-sdk-19/lib\" --add-modules javafx.controls,javafx.fxml"
+            // Change the stuff between 'module path' and 'add modules' to file path to javafx lib
+            // Pay close attention to the slashes and which way they go
         }
     ]
 }
