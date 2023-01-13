@@ -9,10 +9,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 
-public class PleaseProvideControllerClassName {
+public class kanbanScreenTwo {
 
     @FXML
     private Button addTaskBtn;
+    
+    @FXML
+    private Button archiveListBtn;
 
     @FXML
     private Label boardTitle;
@@ -58,6 +61,15 @@ public class PleaseProvideControllerClassName {
 
     }
 
+    /*
+     * Delete category (ex: to do list)
+     * @param
+     */
+    @FXML
+    void btnArchiveListClicked(ActionEvent event) {
+
+    }
+
     @FXML
     void btnDeleteClicked(ActionEvent event) {
 
@@ -77,7 +89,10 @@ public class PleaseProvideControllerClassName {
     void btnRightClicked(ActionEvent event) {
 
     }
-
+    
+    /* Save progress and write kanban board info onto a txt file
+     * @param
+     */
     @FXML
     void btnSaveClicked(ActionEvent event) {
 
