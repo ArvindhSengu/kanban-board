@@ -1,6 +1,0 @@
-task name|task description|urgency|category
-eat breakfast|get enough nutrients before school|high|to do
-finish homework|make sure you earn your credits|low|to do
-exercise|make sure you stay in shape|mid|in progress
-play in band|enjoy what you do|low|complete
-attend math class|keep you sharp|high|in progress
