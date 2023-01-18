@@ -1,5 +1,5 @@
 class TaskDetails{
-    public String blank = "";
+    public final String blank = "";
     private String name;
     private String description;
     private String urgency;
