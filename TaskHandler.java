@@ -114,6 +114,30 @@ class TaskHandler{
             e.printStackTrace();
         }
 	}
+	public void rightArrow(String name){
+		int i = searchTask(name);
+		if(i != -1){
+			String aCat = tasks.get(i).getCat();
+			if(aCat.equals("to do")){
+				tasks.get(i).updateCat("in progress");
+			} else if(aCat.equals("in progress")){
+				tasks.get(i).updateCat("complete");
+			}
+			refreshFile();
+		}
+	}
+	public void leftArrow(String name){
+		int i = searchTask(name);
+		if(i != -1){
+			String aCat = tasks.get(i).getCat();
+			if(aCat.equals("complete")){
+				tasks.get(i).updateCat("in progress");
+			} else if(aCat.equals("in progress")){
+				tasks.get(i).updateCat("to do");
+			}
+			refreshFile();
+		}
+	}
 	public ArrayList<TaskDetails> getTaskDetails(){
 		return tasks;
 	}
