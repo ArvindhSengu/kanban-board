@@ -7,6 +7,7 @@ class Test{
         th.rightArrow("learn driving");
         th.updateTaskName("learn driving", "learn how to drive");
         th.updateDescription("learn how to drive", "get ready for your g2 exam");
+        th.updateUrg("learn how to drive", "HIGH");
         th.sortTasks();
         for(TaskDetails td : th.getTaskDetails()){
             System.out.println(td.toString());
