@@ -138,6 +138,23 @@ class TaskHandler{
 			refreshFile();
 		}
 	}
+	public void updateTaskName(String task, String newname){
+		int i = searchTask(task);
+		int j = searchTask(newname);
+		if(i != -1 && j == -1){
+			tasks.get(i).updateName(newname);
+			refreshFile();
+		} else{
+			System.out.println("could not find task or new taskname already exists");
+		}
+	}
+	public void updateDescription(String name, String newDescr){
+		int i = searchTask(name);
+		if(i != -1){
+			tasks.get(i).updateDescr(newDescr);
+			refreshFile();
+		}
+	}
 	public ArrayList<TaskDetails> getTaskDetails(){
 		return tasks;
 	}
