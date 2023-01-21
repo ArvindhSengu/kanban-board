@@ -155,6 +155,13 @@ class TaskHandler{
 			refreshFile();
 		}
 	}
+	public void updateUrg(String name, String newUrgency){
+		int i = searchTask(name);
+		if(i != -1){
+			tasks.get(i).updateUrgency(newUrgency.toLowerCase());
+			refreshFile();
+		}
+	}
 	public ArrayList<TaskDetails> getTaskDetails(){
 		return tasks;
 	}
