@@ -20,7 +20,7 @@
          <font>
             <Font size="24.0" />
          </font></Button>
-      <Button fx:id="addTaskBtn" layoutX="1160.0" layoutY="96.0" mnemonicParsing="false" onAction="#btnAddTaskClicked" prefHeight="41.0" prefWidth="59.0" text="+">
+      <Button fx:id="addTaskBtn" layoutX="1190.0" layoutY="135.0" mnemonicParsing="false" onAction="#btnAddTaskClicked" prefHeight="55.0" prefWidth="68.0" text="+">
          <font>
             <Font size="24.0" />
          </font></Button>
@@ -50,5 +50,10 @@
             </AnchorPane>
         </content>
       </TitledPane>
+      <Button fx:id="addTaskBtn1" layoutX="1190.0" layoutY="199.0" mnemonicParsing="false" onAction="#btnDeleteClicked" prefHeight="55.0" prefWidth="68.0" text="Del">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
