@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -145,58 +146,60 @@ public class KanbanBoardController implements Initializable{
         Dialog dialog = new Dialog<>();
         dialog.setTitle("New Task");
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        //dialog.getDialogPane().getButtonTypes().add
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().setContent(createTaskForm());
-        dialog.show();
-        TitledPane newTask = new TitledPane();
-        AnchorPane taskback = new AnchorPane();
-        TextArea taskText = new TextArea();
-        ChoiceBox<String> urgencyChoice = new ChoiceBox<String>();
-        urgencyChoice.setValue("Urgency Select");
-        ObservableList<String> list = urgencyChoice.getItems();
-        list.add("HIGH");
-        list.add("MID");
-        list.add("LOW");
-        
-        taskback.setPrefSize(300,277);
-
-        urgencyChoice.setPrefSize(160,30);
-
-        taskText.setPrefSize(250,180);
-        taskText.setLayoutX(8);
-        taskText.setLayoutY(42);
-        taskText.setWrapText(true);
-        // Find a way to fix off-center textArea
-        
-        newTask.setPrefSize(300,263);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(result.get() == ButtonType.OK){
+            TitledPane newTask = new TitledPane();
+            AnchorPane taskback = new AnchorPane();
+            TextArea taskText = new TextArea();
+            ChoiceBox<String> urgencyChoice = new ChoiceBox<String>();
+            urgencyChoice.setValue("Urgency Select");
+            ObservableList<String> list = urgencyChoice.getItems();
+            list.add("HIGH");
+            list.add("MID");
+            list.add("LOW");
             
-        taskback.getChildren().addAll(urgencyChoice,taskText);
-        newTask.setContent(taskback);
+            taskback.setPrefSize(300,277);
 
-        urgencyChoice.setOnAction(e ->{
-            String myColor = urgencyChoice.getValue();
-    
-            if(myColor.equals("HIGH")){
-                newTask.setTextFill(Color.RED);
-            }
-            else if(myColor.equals("MID")){
-                newTask.setTextFill(Color.YELLOW);
-            }
-            else if(myColor.equals("LOW")){
-                newTask.setTextFill(Color.GREEN);
-            }
-        });
+            urgencyChoice.setPrefSize(160,30);
 
-        newTask.setText("Task Name Here");
-        newTask.setTextFill(Color.GREEN);
-        accordion.getPanes().add(newTask);
+            taskText.setPrefSize(250,180);
+            taskText.setLayoutX(8);
+            taskText.setLayoutY(42);
+            taskText.setWrapText(true);
+            // Find a way to fix off-center textArea
+            
+            newTask.setPrefSize(300,263);
+                
+            taskback.getChildren().addAll(urgencyChoice,taskText);
+            newTask.setContent(taskback);
+
+            urgencyChoice.setOnAction(e ->{
+                String myColor = urgencyChoice.getValue();
+
+                if(myColor.equals("HIGH")){
+                    newTask.setTextFill(Color.RED);
+                }
+                else if(myColor.equals("MID")){
+                    newTask.setTextFill(Color.YELLOW);
+                }
+                else if(myColor.equals("LOW")){
+                    newTask.setTextFill(Color.GREEN);
+                }
+            });
+
+            newTask.setText("Task name here");
+            newTask.setTextFill(Color.GREEN);
+            accordion.getPanes().add(newTask);
+            }
+        
     }
     
     private Node createTaskForm(){
         GridPane gridPane = new GridPane();
         gridPane.add(new Label("Task name: "), 0, 0);
         gridPane.add(new TextField(), 1, 0);
-        gridPane.add(new Button("OK"), 0, 4);
         return gridPane;
     }
 
