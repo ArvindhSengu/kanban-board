@@ -86,7 +86,17 @@ public class KanbanBoardController implements Initializable{
     public void passFilePath(String filePath){
         th = new TaskHandler(filePath);
     }
-    
+    public void readImportedFile(){
+        th.readFile();
+    }
+    public void loadFile(){
+        ArrayList<TaskDetails> tasks = new ArrayList<TaskDetails>();
+        th.sortTasks();
+        tasks = th.getTaskDetails();
+        for(int i = 0; i < task.size(); i++){
+            addTask(tasks.get(i).getName(), tasks.get(i).getDescr(), task.get(i).getUrg(), task.get(i).getCat());
+        }
+    }
     @FXML
     void btnAddTaskClicked(ActionEvent event) {
         Dialog<Pair<String, String>> dialog = new Dialog<>();
@@ -104,7 +114,6 @@ public class KanbanBoardController implements Initializable{
         taskCategoryField.setPromptText("Task Category: ");
 
         gridPane.add(taskNameField, 0, 0);
-        //gridPane.add(new Label("To:"), 1, 0);
         gridPane.add(taskCategoryField, 2, 0);
 
         dialog.getDialogPane().setContent(gridPane);
