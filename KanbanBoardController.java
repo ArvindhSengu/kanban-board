@@ -22,6 +22,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -143,13 +144,12 @@ public class KanbanBoardController implements Initializable{
 
 
     public void addTask(Accordion accordion){    
-        Dialog dialog = new Dialog<>();
-        dialog.setTitle("New Task");
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        dialog.getDialogPane().setContent(createTaskForm());
-        Optional<ButtonType> result = dialog.showAndWait();
-        if(result.get() == ButtonType.OK){
+        TextInputDialog textInput = new TextInputDialog();
+        textInput.setTitle("New Task");
+        textInput.getDialogPane().setContentText("Task name: ");
+        Optional<String> result = textInput.showAndWait();
+        TextField input = textInput.getEditor();
+        if(input.getText() != null && input.getText().toString().length() != 0){
             TitledPane newTask = new TitledPane();
             AnchorPane taskback = new AnchorPane();
             TextArea taskText = new TextArea();
@@ -189,20 +189,11 @@ public class KanbanBoardController implements Initializable{
                 }
             });
 
-            newTask.setText("Task name here");
+            newTask.setText(input.getText());
             newTask.setTextFill(Color.GREEN);
             accordion.getPanes().add(newTask);
-            }
-        
     }
-    
-    private Node createTaskForm(){
-        GridPane gridPane = new GridPane();
-        gridPane.add(new Label("Task name: "), 0, 0);
-        gridPane.add(new TextField(), 1, 0);
-        return gridPane;
-    }
-
+}
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         fileChooser.setInitialDirectory(new File("C:"));
