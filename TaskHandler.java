@@ -15,6 +15,11 @@ class TaskHandler{
     ArrayList<TaskDetails> tasks;
 	//Hashmap containing key:value pairs for urgency:numval
 	HashMap<String, Integer> urgMap;
+
+	public void initializeTH(String filePath){
+		
+	}
+
 	/**
 	 * constructor to get the filepath, initialize ArrayList tasks and declare UrgMap
 	 * @param inp the filepath to be read
