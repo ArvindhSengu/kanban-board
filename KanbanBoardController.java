@@ -130,7 +130,6 @@ public class KanbanBoardController implements Initializable{
         taskCategoryField.setPromptText("Task Category: ");
 
         gridPane.add(taskNameField, 0, 0);
-        //gridPane.add(new Label("To:"), 1, 0);
         gridPane.add(taskCategoryField, 2, 0);
 
         dialog.getDialogPane().setContent(gridPane);
