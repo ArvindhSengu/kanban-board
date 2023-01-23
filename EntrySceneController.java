@@ -28,6 +28,9 @@ public class EntrySceneController {
 
   @FXML
   void createKanbanBoard(ActionEvent event) throws IOException {
+    KanbanBoardController kanbanBoardController = new KanbanBoardController();
+    kanbanBoardController.passFilePath(nameField.getText() + ".txt");
+
     root = FXMLLoader.load(getClass().getResource("KanbanBoardScene.fxml"));
     stage = (Stage)((Node)event.getSource()).getScene().getWindow();
     scene = new Scene(root);

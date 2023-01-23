@@ -75,7 +75,6 @@ public class KanbanBoardController implements Initializable{
     @FXML
     private ColorPicker urgency;
     
-    //static String filePath1;
     TitledPane newTask = new TitledPane();
     List<String> list = new ArrayList<String>();
     ChoiceBox<String> urgencyChoice = new ChoiceBox<String>();
@@ -92,9 +91,17 @@ public class KanbanBoardController implements Initializable{
 
     @FXML
     void btnDeleteClicked(ActionEvent event) {
-        //th.deleteTask(null);
+        TextInputDialog textInput = new TextInputDialog();
+        textInput.setTitle("Remove Task");
+        textInput.getDialogPane().setContentText("Task name: ");
+        textInput.showAndWait();
+        TextField input = textInput.getEditor();
+        int i = th.searchTask(input.getText());
+        if(input.getText() != null && input.getText().toString().length() != 0 && i != -1){
+            toDoAccordion.getPanes().remove(th.searchTask(input.getText()) + 1);
+            th.deleteTask(input.getText());
+        }
     }
-
     @FXML
     void btnLeftClicked(ActionEvent event) {
         
@@ -147,9 +154,12 @@ public class KanbanBoardController implements Initializable{
         TextInputDialog textInput = new TextInputDialog();
         textInput.setTitle("New Task");
         textInput.getDialogPane().setContentText("Task name: ");
-        Optional<String> result = textInput.showAndWait();
         TextField input = textInput.getEditor();
-        if(input.getText() != null && input.getText().toString().length() != 0){
+        textInput.showAndWait();
+        int i = th.searchTask(input.getText());
+        if(input.getText() != null && input.getText().toString().length() != 0 && i == -1){
+            th.addTask(new TaskDetails(input.getText(), "", "LOW", "to do"));
+            th.refreshFile();
             TitledPane newTask = new TitledPane();
             AnchorPane taskback = new AnchorPane();
             TextArea taskText = new TextArea();
@@ -159,7 +169,6 @@ public class KanbanBoardController implements Initializable{
             list.add("HIGH");
             list.add("MID");
             list.add("LOW");
-            
             taskback.setPrefSize(300,277);
 
             urgencyChoice.setPrefSize(160,30);
@@ -180,12 +189,15 @@ public class KanbanBoardController implements Initializable{
 
                 if(myColor.equals("HIGH")){
                     newTask.setTextFill(Color.RED);
+                    th.updateUrg(input.getText(), "HIGH");
                 }
                 else if(myColor.equals("MID")){
                     newTask.setTextFill(Color.YELLOW);
+                    th.updateUrg(input.getText(), "MID");
                 }
                 else if(myColor.equals("LOW")){
                     newTask.setTextFill(Color.GREEN);
+                    th.updateUrg(input.getText(), "LOW");
                 }
             });
 
