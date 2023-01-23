@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -12,13 +11,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -26,7 +22,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -164,12 +159,25 @@ public class KanbanBoardController implements Initializable{
             AnchorPane taskback = new AnchorPane();
             TextArea taskText = new TextArea();
             ChoiceBox<String> urgencyChoice = new ChoiceBox<String>();
+            
             urgencyChoice.setValue("Urgency Select");
             ObservableList<String> list = urgencyChoice.getItems();
             list.add("HIGH");
             list.add("MID");
             list.add("LOW");
             taskback.setPrefSize(300,277);
+
+            Button leftBtn = new Button();
+            Button rightBtn = new Button();
+
+            leftBtn.setLayoutX(170);
+            leftBtn.setLayoutY(0);
+            leftBtn.setText("Left");
+            leftBtn.setPrefWidth(50);
+            rightBtn.setLayoutX(220);
+            rightBtn.setLayoutY(0);
+            rightBtn.setText("Right");
+            rightBtn.setPrefWidth(50);
 
             urgencyChoice.setPrefSize(160,30);
 
@@ -181,7 +189,7 @@ public class KanbanBoardController implements Initializable{
             
             newTask.setPrefSize(300,263);
                 
-            taskback.getChildren().addAll(urgencyChoice,taskText);
+            taskback.getChildren().addAll(urgencyChoice,taskText, leftBtn, rightBtn);
             newTask.setContent(taskback);
 
             urgencyChoice.setOnAction(e ->{
