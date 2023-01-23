@@ -49,9 +49,6 @@ public class EntrySceneController {
         while (true) {
           if (fileFound) {
             System.out.println("FILE FOUND! ");
-            TextField input= new TextField();
-            String text = input.getText().toString();
-            TaskHandler th = new TaskHandler(text);
             // th.readFile();
             // th.sortTasks();
             break;

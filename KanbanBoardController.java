@@ -11,25 +11,33 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 public class KanbanBoardController implements Initializable{
     
     @FXML
     private Button addTaskBtn;
+    
+    @FXML
+    private Button renameTaskBtn;
 
     @FXML
     private Label boardTitle;
@@ -81,30 +89,122 @@ public class KanbanBoardController implements Initializable{
     
     @FXML
     void btnAddTaskClicked(ActionEvent event) {
-        addTask(toDoAccordion);
-    }
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("New Task");
+        ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
 
-    @FXML
-    void btnDeleteClicked(ActionEvent event) {
-        TextInputDialog textInput = new TextInputDialog();
-        textInput.setTitle("Remove Task");
-        textInput.getDialogPane().setContentText("Task name: ");
-        textInput.showAndWait();
-        TextField input = textInput.getEditor();
-        int i = th.searchTask(input.getText());
-        if(input.getText() != null && input.getText().toString().length() != 0 && i != -1){
-            toDoAccordion.getPanes().remove(th.searchTask(input.getText()) + 1);
-            th.deleteTask(input.getText());
+        TextField taskNameField = new TextField();
+        taskNameField.setPromptText("Task Name: ");
+        TextField taskCategoryField = new TextField();
+        taskCategoryField.setPromptText("Task Category: ");
+
+        gridPane.add(taskNameField, 0, 0);
+        //gridPane.add(new Label("To:"), 1, 0);
+        gridPane.add(taskCategoryField, 2, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+        dialog.showAndWait();
+        int i = th.searchTask(taskNameField.getText());
+        boolean j = verifyCat(taskCategoryField.getText());
+        if(taskNameField != null && taskNameField.getText().toString().length() != 0 && i == -1 && j == true){
+            if(cleanString(taskCategoryField.getText()).equals("todo")){
+                addTask(toDoAccordion, taskNameField.getText(), "LOW", "to do");
+            }
+            else if(cleanString(taskCategoryField.getText()).equals("inprogress")){
+                addTask(inProgAccordion, taskNameField.getText(), "LOW", "in progress");
+            }
+            else{
+                addTask(completeAccordion, taskNameField.getText(), "LOW", "complete");
+            }
         }
     }
     @FXML
-    void btnLeftClicked(ActionEvent event) {
-        
+    void btnDeleteClicked(ActionEvent event) {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Delete Task");
+        ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField taskNameField = new TextField();
+        taskNameField.setPromptText("Task Name: ");
+        TextField taskCategoryField = new TextField();
+        taskCategoryField.setPromptText("Task Category: ");
+
+        gridPane.add(taskNameField, 0, 0);
+        gridPane.add(taskCategoryField, 2, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+        dialog.showAndWait();
+        int i = th.searchTask(taskNameField.getText());
+        boolean j = verifyCat(taskCategoryField.getText());
+        if(taskNameField != null && taskNameField.getText().toString().length() != 0 && i != -1 && j == true){
+            if(cleanString(taskCategoryField.getText()).equals("todo")){
+                delTask(toDoAccordion, taskNameField.getText(), "to do");
+            }
+            else if(cleanString(taskCategoryField.getText()).equals("inprogress")){
+                delTask(inProgAccordion, taskNameField.getText(), "in progress");
+            }
+            else{
+                delTask(completeAccordion, taskNameField.getText(), "complete");
+        }
+    }
+}
+    @FXML
+    void renameBtnClicked(ActionEvent event){
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Rename Task");
+        ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField taskNameField = new TextField();
+        taskNameField.setPromptText("Task Name: ");
+        TextField taskCategoryField = new TextField();
+        taskCategoryField.setPromptText("Task Category: ");
+        TextField newTaskNameField = new TextField();
+        newTaskNameField.setPromptText("New Task Name: ");
+
+        gridPane.add(taskNameField, 0, 0);
+        gridPane.add(taskCategoryField, 1, 0);
+        gridPane.add(newTaskNameField, 2, 0);
+
+        dialog.getDialogPane().setContent(gridPane);
+        dialog.showAndWait();
+        int i = th.searchTask(taskNameField.getText());
+        boolean j = verifyCat(taskCategoryField.getText());
+        if(taskNameField != null && taskNameField.getText().toString().length() != 0 && newTaskNameField!= null & newTaskNameField.getText().toString().length() != 0  && j == true){
+            if(cleanString(taskCategoryField.getText()).equals("todo")){
+                renameTask(toDoAccordion, taskNameField.getText(), newTaskNameField.getText());
+            }
+            else if(cleanString(taskCategoryField.getText()).equals(newTaskNameField.getText())){
+                renameTask(inProgAccordion, taskNameField.getText(), newTaskNameField.getText());
+            }
+            else{
+                renameTask(completeAccordion, taskNameField.getText(), newTaskNameField.getText());
+            }
+        }
+
     }
 
-    @FXML
-    void btnRightClicked(ActionEvent event) {
+    public void renameTask(Accordion category, String name, String newName){
+        category.getPanes().get(th.searchTask(name) + 1).setText(newName);
+        th.updateTaskName(name, newName);
+    }
 
+    public void delTask(Accordion category, String name, String categoryName){
+        category.getPanes().remove(th.searchTask(name) + 1);
     }
 
     @FXML
@@ -145,78 +245,116 @@ public class KanbanBoardController implements Initializable{
     }
 
 
-    public void addTask(Accordion accordion){    
-        TextInputDialog textInput = new TextInputDialog();
-        textInput.setTitle("New Task");
-        textInput.getDialogPane().setContentText("Task name: ");
-        TextField input = textInput.getEditor();
-        textInput.showAndWait();
-        int i = th.searchTask(input.getText());
-        if(input.getText() != null && input.getText().toString().length() != 0 && i == -1){
-            th.addTask(new TaskDetails(input.getText(), "", "LOW", "to do"));
-            th.refreshFile();
-            TitledPane newTask = new TitledPane();
-            AnchorPane taskback = new AnchorPane();
-            TextArea taskText = new TextArea();
-            ChoiceBox<String> urgencyChoice = new ChoiceBox<String>();
-            
-            urgencyChoice.setValue("Urgency Select");
-            ObservableList<String> list = urgencyChoice.getItems();
-            list.add("HIGH");
-            list.add("MID");
-            list.add("LOW");
-            taskback.setPrefSize(300,277);
+    public void addTask(Accordion category, String name, String urgency, String categoryName){    
+        th.addTask(new TaskDetails(name, "", urgency, categoryName));
+        th.refreshFile();
+        TitledPane newTask = new TitledPane();
+        AnchorPane taskback = new AnchorPane();
+        TextArea taskText = new TextArea();
+        ChoiceBox<String> urgencyChoice = new ChoiceBox<String>();
+        
+        urgencyChoice.setValue(urgency);
+        ObservableList<String> list = urgencyChoice.getItems();
+        list.add("HIGH");
+        list.add("MID");
+        list.add("LOW");
+        taskback.setPrefSize(300,277);
 
-            Button leftBtn = new Button();
-            Button rightBtn = new Button();
+        Button leftBtn = new Button();
+        Button rightBtn = new Button();
 
-            leftBtn.setLayoutX(170);
-            leftBtn.setLayoutY(0);
-            leftBtn.setText("Left");
-            leftBtn.setPrefWidth(50);
-            rightBtn.setLayoutX(220);
-            rightBtn.setLayoutY(0);
-            rightBtn.setText("Right");
-            rightBtn.setPrefWidth(50);
+        leftBtn.setLayoutX(170);
+        leftBtn.setLayoutY(0);
+        leftBtn.setText("Left");
+        leftBtn.setPrefWidth(50);
+        rightBtn.setLayoutX(220);
+        rightBtn.setLayoutY(0);
+        rightBtn.setText("Right");
+        rightBtn.setPrefWidth(50);
 
-            urgencyChoice.setPrefSize(160,30);
+        urgencyChoice.setPrefSize(160,30);
 
-            taskText.setPrefSize(250,180);
-            taskText.setLayoutX(8);
-            taskText.setLayoutY(42);
-            taskText.setWrapText(true);
-            // Find a way to fix off-center textArea
-            
-            newTask.setPrefSize(300,263);
-                
-            taskback.getChildren().addAll(urgencyChoice,taskText, leftBtn, rightBtn);
-            newTask.setContent(taskback);
+        taskText.setPrefSize(250,180);
+        taskText.setLayoutX(8);
+        taskText.setLayoutY(42);
+        taskText.setWrapText(true);
+        // Find a way to fix off-center textArea
+        
+        newTask.setPrefSize(300,263);
+        newTask.setMaxSize(300, 263);
+        taskback.getChildren().addAll(urgencyChoice,taskText, leftBtn, rightBtn);
+        newTask.setContent(taskback);
+        urgencyChoice.setOnAction(e ->{
+            String myColor = urgencyChoice.getValue();
 
-            urgencyChoice.setOnAction(e ->{
-                String myColor = urgencyChoice.getValue();
+            if(myColor.equals("HIGH")){
+                newTask.setTextFill(Color.RED);
+                th.updateUrg(name, "HIGH");
+            }
+            else if(myColor.equals("MID")){
+                newTask.setTextFill(Color.YELLOW);
+                th.updateUrg(name, "MID");
+            }
+            else if(myColor.equals("LOW")){
+                newTask.setTextFill(Color.GREEN);
+                th.updateUrg(name, "LOW");
+            }
+            //th.sortTasks();
+            //category.getPanes().remove(newTask);
+            //category.getPanes().add(th.searchTask(name) + 1, newTask);
+        });
 
-                if(myColor.equals("HIGH")){
-                    newTask.setTextFill(Color.RED);
-                    th.updateUrg(input.getText(), "HIGH");
-                }
-                else if(myColor.equals("MID")){
-                    newTask.setTextFill(Color.YELLOW);
-                    th.updateUrg(input.getText(), "MID");
-                }
-                else if(myColor.equals("LOW")){
-                    newTask.setTextFill(Color.GREEN);
-                    th.updateUrg(input.getText(), "LOW");
-                }
-            });
-
-            newTask.setText(input.getText());
+        newTask.setText(name);
+        if(urgency.equals("HIGH")){
+            urgencyChoice.setValue("HIGH");
+            newTask.setTextFill(Color.RED);
+        }
+        else if(urgency.equals("MID")){
+            newTask.setTextFill(Color.YELLOW);
+        }
+        else if(urgency.equals("LOW")){
             newTask.setTextFill(Color.GREEN);
-            accordion.getPanes().add(newTask);
+        }
+        category.getPanes().add(newTask);
+
+        leftBtn.setOnAction(e ->{
+            th.leftArrow(name);
+            if(category.equals(inProgAccordion)){
+                addTask(toDoAccordion, name, urgencyChoice.getValue(), "to do");
+                delTask(category, name, categoryName);
+            }
+            else if(category.equals(completeAccordion)){
+                addTask(inProgAccordion, name, urgencyChoice.getValue(), "in progress");
+                delTask(category, name, categoryName);
+            }
+        }); 
+        
+        rightBtn.setOnAction(e ->{
+            th.rightArrow(name);
+            if(category.equals(toDoAccordion)){
+                addTask(inProgAccordion, name, urgencyChoice.getValue(), "in progress");
+                delTask(category, name, categoryName);
+            }
+            else if(category.equals(inProgAccordion)){
+                addTask(completeAccordion, name, urgencyChoice.getValue(), "complete");
+                delTask(category, name, categoryName);
+            }
+        });
     }
-}
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         fileChooser.setInitialDirectory(new File("C:"));
     }
+    public boolean verifyCat(String text){
+        if(text.replace(" ", "").toLowerCase().equals("todo") || text.replace(" ", "").toLowerCase().equals("inprogress") || text.replace(" ", "").toLowerCase().equals("complete")){
+            return true;
+        }
+        return false;
+    }
+    public String cleanString(String text){
+        return text.replace(" ", "").toLowerCase();
+    }
 }
+
 

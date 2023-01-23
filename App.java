@@ -86,7 +86,5 @@ public class App extends Application implements Initializable{
             }catch (FileNotFoundException e ){
                 e.printStackTrace();
             }
-       
-
     }
 }

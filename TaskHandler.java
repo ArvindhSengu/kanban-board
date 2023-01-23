@@ -84,7 +84,7 @@ class TaskHandler{
 	 */
 	public void addTask(TaskDetails newtask){
 		if(searchTask(newtask.getName()) != -1){
-			System.err.println("task already exists");
+			//System.err.println("task already exists");
 			return;
 		}
 		tasks.add(newtask);
