@@ -96,6 +96,8 @@ public class EntrySceneController {
     void importFile(ActionEvent event) {
         KanbanBoardController kanbanBoardController = new KanbanBoardController();
         kanbanBoardController.passFilePath(verifyFile(fileField));
+        kanbanBoardController.importFilePath();
+        kanbanBoardController.loadFile();
     }
   }
 

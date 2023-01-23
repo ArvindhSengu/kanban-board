@@ -86,6 +86,32 @@ public class KanbanBoardController implements Initializable{
     public void passFilePath(String filePath){
         th = new TaskHandler(filePath);
     }
+
+    public void importFilePath(){
+        th.readFile();
+    }
+    public void loadFile(){
+        ArrayList<TaskDetails> tasks = new ArrayList<TaskDetails>();
+        tasks = th.getTaskDetails(); 
+        for(TaskDetails td : tasks){
+            System.out.println(td.toString());
+        }
+        for(int i = 0; i < tasks.size(); i++){
+            if(tasks.get(i).getCat().equals("to do")){
+                System.out.println(tasks.get(i).getCat());
+                //addTask(toDoAccordion,tasks.get(i).getName(), tasks.get(i).getDescr(), tasks.get(i).getUrg(), tasks.get(i).getCat());
+            }
+            else if(tasks.get(i).getCat().equals("in progress")){
+                System.out.println(tasks.get(i).getCat());
+                //addTask(inProgAccordion, tasks.get(i).getName(), tasks.get(i).getDescr(), tasks.get(i).getUrg(), tasks.get(i).getCat());
+            }
+            else if(tasks.get(i).getCat().equals("complete")){
+                System.out.println(tasks.get(i).getCat());
+                //addTask(completeAccordion,tasks.get(i).getName(), tasks.get(i).getDescr(), tasks.get(i).getUrg(), tasks.get(i).getCat());
+            }
+            
+        }
+    }
     
     @FXML
     void btnAddTaskClicked(ActionEvent event) {
@@ -113,13 +139,13 @@ public class KanbanBoardController implements Initializable{
         boolean j = verifyCat(taskCategoryField.getText());
         if(taskNameField != null && taskNameField.getText().toString().length() != 0 && i == -1 && j == true){
             if(cleanString(taskCategoryField.getText()).equals("todo")){
-                addTask(toDoAccordion, taskNameField.getText(), "LOW", "to do");
+                addTask(toDoAccordion, taskNameField.getText(), "", "LOW", "to do");
             }
             else if(cleanString(taskCategoryField.getText()).equals("inprogress")){
-                addTask(inProgAccordion, taskNameField.getText(), "LOW", "in progress");
+                addTask(inProgAccordion, taskNameField.getText(), "", "LOW", "in progress");
             }
             else{
-                addTask(completeAccordion, taskNameField.getText(), "LOW", "complete");
+                addTask(completeAccordion, taskNameField.getText(), "", "LOW", "complete");
             }
         }
     }
@@ -149,12 +175,15 @@ public class KanbanBoardController implements Initializable{
         if(taskNameField != null && taskNameField.getText().toString().length() != 0 && i != -1 && j == true){
             if(cleanString(taskCategoryField.getText()).equals("todo")){
                 delTask(toDoAccordion, taskNameField.getText(), "to do");
+                th.deleteTask(taskNameField.getText());
             }
             else if(cleanString(taskCategoryField.getText()).equals("inprogress")){
                 delTask(inProgAccordion, taskNameField.getText(), "in progress");
+                th.deleteTask(taskNameField.getText());
             }
-            else{
+            else if(cleanString(taskCategoryField.getText()).equals("complete")){
                 delTask(completeAccordion, taskNameField.getText(), "complete");
+                th.deleteTask(taskNameField.getText());
         }
     }
 }
@@ -187,12 +216,15 @@ public class KanbanBoardController implements Initializable{
         if(taskNameField != null && taskNameField.getText().toString().length() != 0 && newTaskNameField!= null & newTaskNameField.getText().toString().length() != 0  && j == true){
             if(cleanString(taskCategoryField.getText()).equals("todo")){
                 renameTask(toDoAccordion, taskNameField.getText(), newTaskNameField.getText());
+                th.updateTaskName(taskNameField.getText(), newTaskNameField.getText());
             }
-            else if(cleanString(taskCategoryField.getText()).equals(newTaskNameField.getText())){
+            else if(cleanString(taskCategoryField.getText()).equals("inprogress")){
                 renameTask(inProgAccordion, taskNameField.getText(), newTaskNameField.getText());
+                th.updateTaskName(taskNameField.getText(), newTaskNameField.getText());
             }
-            else{
+            else if(cleanString(taskCategoryField.getText()).equals("complete")){
                 renameTask(completeAccordion, taskNameField.getText(), newTaskNameField.getText());
+                th.updateTaskName(taskNameField.getText(), newTaskNameField.getText());
             }
         }
 
@@ -245,14 +277,14 @@ public class KanbanBoardController implements Initializable{
     }
 
 
-    public void addTask(Accordion category, String name, String urgency, String categoryName){    
+    public void addTask(Accordion category, String name, String desc, String urgency, String categoryName){    
         th.addTask(new TaskDetails(name, "", urgency, categoryName));
         th.refreshFile();
         TitledPane newTask = new TitledPane();
         AnchorPane taskback = new AnchorPane();
         TextArea taskText = new TextArea();
         ChoiceBox<String> urgencyChoice = new ChoiceBox<String>();
-        
+        taskText.setText(desc);
         urgencyChoice.setValue(urgency);
         ObservableList<String> list = urgencyChoice.getItems();
         list.add("HIGH");
@@ -318,26 +350,28 @@ public class KanbanBoardController implements Initializable{
         category.getPanes().add(newTask);
 
         leftBtn.setOnAction(e ->{
-            th.leftArrow(name);
             if(category.equals(inProgAccordion)){
-                addTask(toDoAccordion, name, urgencyChoice.getValue(), "to do");
-                delTask(category, name, categoryName);
+                addTask(toDoAccordion, name, desc, urgencyChoice.getValue(), "to do");
+                delTask(toDoAccordion, name, categoryName);
+                th.leftArrow(name);
             }
             else if(category.equals(completeAccordion)){
-                addTask(inProgAccordion, name, urgencyChoice.getValue(), "in progress");
-                delTask(category, name, categoryName);
+                addTask(inProgAccordion, name, desc, urgencyChoice.getValue(), "in progress");
+                delTask(completeAccordion, name, categoryName);
+                th.leftArrow(name);
             }
         }); 
         
         rightBtn.setOnAction(e ->{
-            th.rightArrow(name);
             if(category.equals(toDoAccordion)){
-                addTask(inProgAccordion, name, urgencyChoice.getValue(), "in progress");
-                delTask(category, name, categoryName);
+                addTask(inProgAccordion, name, desc, urgencyChoice.getValue(), "in progress");
+                delTask(inProgAccordion, name, categoryName);
+                th.rightArrow(name);
             }
             else if(category.equals(inProgAccordion)){
-                addTask(completeAccordion, name, urgencyChoice.getValue(), "complete");
-                delTask(category, name, categoryName);
+                addTask(completeAccordion, name, desc, urgencyChoice.getValue(), "complete");
+                delTask(completeAccordion, name, categoryName);
+                th.rightArrow(name);
             }
         });
     }
