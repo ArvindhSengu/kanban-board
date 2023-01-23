@@ -94,7 +94,8 @@ public class EntrySceneController {
 
     @FXML
     void importFile(ActionEvent event) {
-        verifyFile(fileField);
+        KanbanBoardController kanbanBoardController = new KanbanBoardController();
+        kanbanBoardController.passFilePath(verifyFile(fileField));
     }
   }
 

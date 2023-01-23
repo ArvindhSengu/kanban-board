@@ -69,12 +69,14 @@ public class KanbanBoardController implements Initializable{
     @FXML
     private ColorPicker urgency;
     
+    //static String filePath1;
     TitledPane newTask = new TitledPane();
     List<String> list = new ArrayList<String>();
     ChoiceBox<String> urgencyChoice = new ChoiceBox<String>();
-
-    public void initializeTaskHandler(String filePath){
-        TaskHandler th = new TaskHandler(filePath);
+    static TaskHandler th;
+    
+    public void passFilePath(String filePath){
+        th = new TaskHandler(filePath);
     }
     
     @FXML
@@ -84,7 +86,7 @@ public class KanbanBoardController implements Initializable{
 
     @FXML
     void btnDeleteClicked(ActionEvent event) {
-        
+        //th.deleteTask(null);
     }
 
     @FXML
