@@ -11,16 +11,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -91,7 +95,7 @@ public class KanbanBoardController implements Initializable{
 
     @FXML
     void btnLeftClicked(ActionEvent event) {
-
+        
     }
 
     @FXML
@@ -137,7 +141,13 @@ public class KanbanBoardController implements Initializable{
     }
 
 
-    public void addTask(Accordion accordion){      
+    public void addTask(Accordion accordion){    
+        Dialog dialog = new Dialog<>();
+        dialog.setTitle("New Task");
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        //dialog.getDialogPane().getButtonTypes().add
+        dialog.getDialogPane().setContent(createTaskForm());
+        dialog.show();
         TitledPane newTask = new TitledPane();
         AnchorPane taskback = new AnchorPane();
         TextArea taskText = new TextArea();
@@ -180,6 +190,14 @@ public class KanbanBoardController implements Initializable{
         newTask.setText("Task Name Here");
         newTask.setTextFill(Color.GREEN);
         accordion.getPanes().add(newTask);
+    }
+    
+    private Node createTaskForm(){
+        GridPane gridPane = new GridPane();
+        gridPane.add(new Label("Task name: "), 0, 0);
+        gridPane.add(new TextField(), 1, 0);
+        gridPane.add(new Button("OK"), 0, 4);
+        return gridPane;
     }
 
     @Override
